@@ -1,0 +1,8 @@
+{% load static %}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{% block title %}CyberVault{% endblock %}</title><meta name="csrf-token" content="{{ csrf_token }}"><link rel="stylesheet" href="{% static 'vault/style.css' %}"></head>
+<body>
+<div class="app-shell">
+{% if user.is_authenticated %}<aside class="sidebar"><a class="brand" href="{% url 'vault:dashboard' %}"><span class="brand-mark">CV</span><span><b>CyberVault</b><small>Secure Password Manager</small></span></a><nav><a href="{% url 'vault:dashboard' %}">◫ Dashboard</a><a href="{% url 'vault:list' %}">▤ Password Vault</a><a href="{% url 'vault:security' %}">⌁ Security Center</a><a href="{% url 'vault:activity' %}">◷ Activity Log</a><a href="{% url 'vault:create' %}">＋ Add Credential</a></nav><div class="sidebar-foot"><div class="user-chip"><span>{{ user.username|slice:':1'|upper }}</span><div><b>{{ user.username }}</b><small>Encrypted vault</small></div></div><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-btn">Sign out</button></form></div></aside>{% endif %}
+<main class="{% if user.is_authenticated %}main{% else %}auth-main{% endif %}">{% if user.is_authenticated %}<header class="topbar"><div><span class="eyebrow">ZERO-TRUST PERSONAL VAULT</span><h1>{% block page_title %}CyberVault{% endblock %}</h1></div><a class="btn primary" href="{% url 'vault:create' %}">+ New credential</a></header>{% endif %}
+{% for message in messages %}<div class="toast {{ message.tags }}">{{ message }}</div>{% endfor %}{% block content %}{% endblock %}</main></div>
+<script src="{% static 'vault/app.js' %}"></script>{% block scripts %}{% endblock %}</body></html>
